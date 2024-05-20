@@ -1,6 +1,6 @@
 import SwiftUI
 
-public struct MyCustomView<T: CaseIterable & RawRepresentable>: View where T.AllCases: RandomAccessCollection, T.RawValue == String {
+public struct CustomToggle<T: CaseIterable & RawRepresentable>: View where T.AllCases: RandomAccessCollection, T.RawValue == String {
     let item: T.Type
     @State private var selectedTheme: T
     let onTap: (T) -> Void
@@ -12,17 +12,19 @@ public struct MyCustomView<T: CaseIterable & RawRepresentable>: View where T.All
     }
     public var body: some View {
         HStack(spacing: 0) {
-            ForEach(item.allCases, id: \.rawValue) { theme in
-                Text(theme.rawValue)
-                    .padding(.vertical, 10)
-                    .frame(width: 100)
-                    .contentShape(Rectangle())
-                    .background(theme == selectedTheme  ? Color.gray : Color.clear)
-                    .cornerRadius(5)
-                    .onTapGesture {
-                        selectedTheme = theme
-                        onTap(theme)
-                    }
+            ScrollView {
+                ForEach(item.allCases, id: \.rawValue) { theme in
+                    Text(theme.rawValue)
+                        .padding(.vertical, 10)
+                        .frame(width: 100)
+                        .contentShape(Rectangle())
+                        .background(theme == selectedTheme  ? Color.gray : Color.clear)
+                        .cornerRadius(5)
+                        .onTapGesture {
+                            selectedTheme = theme
+                            onTap(theme)
+                        }
+                }
             }
         }
         .padding(3)
